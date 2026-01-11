@@ -1,0 +1,44 @@
+## C# / .NET Core Standard
+[Bb]in/
+[Oo]bj/
+.config
+*.bat
+*.exe
+*.dll
+*.pdb
+*.lock.json
+project.lock.json
+*.slnx
+
+## Visual Studio & Editor Files
+.vs/
+.vscode/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+*.ide
+
+## SQL Server / Database Files (მნიშვნელოვანია ADO.NET-ისთვის)
+# არ გვინდა ბაზის ფიზიკური ფაილები გიტზე მოხვდეს
+*.mdf
+*.ldf
+*.ndf
+*.sqlite
+*.db
+
+## Security & Settings 
+appsettings.Development.json
+appsettings.Local.json
+secrets.json
+
+## OneDrive & OS Junk
+Thumbs.db
+.DS_Store
+desktop.ini
+*_conflict_*
+*.tmp
+
+## Test Results
+TestResults/
+*.trcen
