@@ -18,8 +18,40 @@ namespace EfConsoleApp.Console
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<FootballerAgent>()
                 .HasKey(fa => new { fa.FootballerId, fa.AgentId });
+
+            modelBuilder.Entity<Club>()
+                .HasData(
+                    new Club { Id = 1, Name = "Real Madrid", Country = "Spain" }
+                );
+
+            modelBuilder.Entity<Footballer>()
+                .HasData(
+                    new Footballer { Id = 1, FirstName = "Cristiano", LastName = "Ronaldo", JerseyNumber = 7, BirthDate = new DateTime(1985, 2, 5), ClubId = 1 }
+                );
+
+            modelBuilder.Entity<Agent>()
+                .HasData(new Agent { Id = 1, Name = "Jorge Mendes" });
+
+            modelBuilder.Entity<TransferMarketData>()
+                .HasData(
+                    new TransferMarketData
+                    {
+                        Id = 1,
+                        Marketvalue = 1000000m,
+                        ContractExpirationDate = new DateTime(2027, 1, 1),
+                        FootballerId = 1,
+                    });
+
+            modelBuilder.Entity<FootballerAgent>()
+                .HasData(
+                    new FootballerAgent { FootballerId = 1, AgentId = 1 }
+                );
+
+
         }
     }
 }
