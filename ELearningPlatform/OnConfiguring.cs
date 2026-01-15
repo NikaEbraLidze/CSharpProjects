@@ -10,11 +10,11 @@ namespace ELearningPlatform
         private const string _connString =
             "Server=localhost\\SQLEXPRESS;Database=AppDbContext;Trusted_Connection=True;TrustServerCertificate=True;";
 
-        DbSet<Entities.Course> Courses { get; set; }
-        DbSet<Entities.Student> Students { get; set; }
-        DbSet<Entities.StudentsCourses> StudentsCourses { get; set; }
-        DbSet<Entities.Instructor> Instructors { get; set; }
-        DbSet<Entities.Review> Reviews { get; set; }
+        public DbSet<Entities.Course> Courses { get; set; }
+        public DbSet<Entities.Student> Students { get; set; }
+        public DbSet<Entities.StudentsCourses> StudentsCourses { get; set; }
+        public DbSet<Entities.Instructor> Instructors { get; set; }
+        public DbSet<Entities.Review> Reviews { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
