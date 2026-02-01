@@ -14,5 +14,6 @@ namespace MyApi.Entities
         public string ImageUrl { get; set; }
         public DateTime CreatedAt { get; set; }
         public bool CommentsAreAllowed { get; set; }
+        public List<Comment> Comments { get; set; }
     }
 }

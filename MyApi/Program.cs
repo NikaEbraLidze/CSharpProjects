@@ -1,7 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 
+using Mapster;
+using MapsterMapper;
+
 using MyApi.Data;
 using MyApi.Repository;
+using MyApi.Services.Mapping;
 
 namespace MyApi
 {
@@ -22,6 +26,11 @@ namespace MyApi
             // Transient  → one instance every time it's requested
             builder.Services.AddScoped<ITopicRepository, TopicRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+
+            var config = TypeAdapterConfig.GlobalSettings;
+            MappingConfig.Register(config);
+            builder.Services.AddSingleton(config);
+            builder.Services.AddScoped<IMapper, ServiceMapper>();
 
             var app = builder.Build();
 

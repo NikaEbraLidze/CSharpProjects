@@ -10,7 +10,7 @@ namespace MyApi.Repository
     {
         public Task AddAsync(T entity);
         public Task RemoveAsync(T entity);
-        public void UpdateAsync(T entity);
+        public void Update(T entity);
         public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate);
         public Task<T> GetAsync(
             Expression<Func<T, bool>> predicate,

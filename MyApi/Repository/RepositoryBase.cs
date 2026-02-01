@@ -17,10 +17,12 @@ namespace MyApi.Repository
             _dbSet = _context.Set<T>();
         }
 
+        public async Task<int> SaveAsync(CancellationToken cancellationToken = default) => await _context.SaveChangesAsync(cancellationToken);
+
         public async Task AddAsync(T entity) => await _dbSet.AddAsync(entity);
 
         public async Task RemoveAsync(T entity) => _dbSet.Remove(entity);
-        public void UpdateAsync(T entity) => _dbSet.Update(entity);
+        public void Update(T entity) => _dbSet.Update(entity);
 
         public Task<bool> ExistsAsync(Expression<Func<T, bool>> predicate) => _dbSet.AnyAsync(predicate);
         public async Task<T> GetAsync(
@@ -109,7 +111,5 @@ namespace MyApi.Repository
             }
             return query;
         }
-
-        public async Task<int> SaveAsync(CancellationToken cancellationToken = default) => await _context.SaveChangesAsync(cancellationToken);
     }
 }
