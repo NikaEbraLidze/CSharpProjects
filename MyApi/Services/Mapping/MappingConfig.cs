@@ -9,7 +9,12 @@ namespace MyApi.Services.Mapping
     {
         public static void Register(TypeAdapterConfig config)
         {
-            config.NewConfig<Topic, TopicDTO>();
+            config.NewConfig<Comment, CommentDTO>();
+
+            config.NewConfig<Topic, TopicDTO>()
+                .Map(dest => dest.Comments,
+                     src => (src.Comments ?? new List<Comment>()).Adapt<List<CommentDTO>>());
+
             config.NewConfig<Topic, GetTopicsDTO>();
 
             config.NewConfig<CreateTopicDTO, Topic>()
@@ -17,8 +22,6 @@ namespace MyApi.Services.Mapping
                 .Map(dest => dest.Comments, _ => new List<Comment>());
 
             config.NewConfig<UpdateTopicDTO, Topic>();
-
-            config.NewConfig<Comment, CommentDTO>();
 
             config.NewConfig<CreateCommentDTO, Comment>()
                 .Map(dest => dest.CreatedAt, _ => DateTime.UtcNow);

@@ -1,11 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 
 using Mapster;
+
 using MapsterMapper;
 
 using MyApi.Data;
 using MyApi.Repository;
 using MyApi.Services.Mapping;
+using MyApi.Services;
+using MyApi.Middleware;
+
+using Serilog;
 
 namespace MyApi
 {
@@ -14,6 +19,13 @@ namespace MyApi
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+
+            builder.Host.UseSerilog((context, configuration) =>
+            {
+                configuration.ReadFrom.Configuration(context.Configuration);
+            });
+
+            Log.Information("Starting MyApi");
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -26,6 +38,7 @@ namespace MyApi
             // Transient  → one instance every time it's requested
             builder.Services.AddScoped<ITopicRepository, TopicRepository>();
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
+            builder.Services.AddScoped<ITopicService, TopicService>();
 
             var config = TypeAdapterConfig.GlobalSettings;
             MappingConfig.Register(config);
@@ -37,10 +50,26 @@ namespace MyApi
             app.UseSwagger();
             app.UseSwaggerUI();
 
+            app.UseMiddleware<ErrorHandlingMiddleware>();
+
+            app.UseSerilogRequestLogging();
+
             app.UseHttpsRedirection();
             app.UseAuthorization();
             app.MapControllers();
-            app.Run();
+
+            try
+            {
+                app.Run();
+            }
+            catch (Exception ex)
+            {
+                Log.Fatal(ex, "Application terminated unexpectedly");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
+            }
         }
     }
 }

@@ -17,13 +17,15 @@ namespace MyApi.Services
             _mapper = mapper;
         }
 
-        public async Task<int> CreateTopicAsync(CreateTopicDTO model)
+        public async Task<Guid> CreateTopicAsync(CreateTopicDTO model)
         {
             ValidateCreateTopicModel(model);
 
             var topicEntity = _mapper.Map<Topic>(model);
             await _topicRepository.AddAsync(topicEntity);
-            return await _topicRepository.SaveAsync();
+            await _topicRepository.SaveAsync();
+
+            return topicEntity.Id;
         }
 
         public async Task<(List<GetTopicsDTO> topics, int totalCount)> GetAllTopicsAsync(int? pageNumber, int? pageSize)
@@ -35,22 +37,30 @@ namespace MyApi.Services
             return (_mapper.Map<List<GetTopicsDTO>>(result.Items), result.TotalCount);
         }
 
-        public Task<TopicDTO> GetTopicByIdAsync(Guid id)
+        public async Task<TopicDTO> GetTopicByIdAsync(Guid id)
         {
             ValidateGuid(id);
 
-            var result = _topicRepository.GetAsync(t => t.Id == id);
+            var result = await _topicRepository.GetAsync(
+                t => t.Id == id,
+                includeProperties: "Comments",
+                tracking: false
+            );
 
-            return _mapper.Map<Task<TopicDTO>>(result);
+            if (result == null) return null;
+
+            return _mapper.Map<TopicDTO>(result);
         }
 
-        public async Task<int> UpdateTopicAsync(UpdateTopicDTO model)
+        public async Task<Guid> UpdateTopicAsync(UpdateTopicDTO model)
         {
             ValidateUpdateTopicModel(model);
 
             var topicEntity = _mapper.Map<Topic>(model);
             _topicRepository.Update(topicEntity);
-            return await _topicRepository.SaveAsync();
+            await _topicRepository.SaveAsync();
+
+            return topicEntity.Id;
         }
 
         #region Validation Methods
